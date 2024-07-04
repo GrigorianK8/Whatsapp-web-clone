@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private final JwtTokenUtil tokenUtil;
 
     @Override
-    public User findUserById(Long id) throws Exception {
+    public User findUserById(Long id) throws UserException {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             return user.get();
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserProfile(String jwt) throws Exception {
+    public User findUserProfile(String jwt) throws UserException {
 
         String email = tokenUtil.getEmailByToken(jwt);
         if (email == null) {
