@@ -1,0 +1,22 @@
+export const stories = [
+	{
+		image:
+			'https://images.pexels.com/photos/25947716/pexels-photo-25947716.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
+	},
+	{
+		image:
+			'https://images.pexels.com/photos/27027515/pexels-photo-27027515.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
+	},
+	{
+		image:
+			'https://images.pexels.com/photos/19068966/pexels-photo-19068966.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
+	},
+	{
+		image:
+			'https://images.pexels.com/photos/23383398/pexels-photo-23383398.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
+	},
+	{
+		image:
+			'https://images.pexels.com/photos/26654307/pexels-photo-26654307.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
+	},
+]

@@ -59,7 +59,10 @@ const HomePage = () => {
 										<p>username</p>
 									</div>
 									<div className='flex space-x-3 text-2xl'>
-										<TbCircleDashed />
+										<TbCircleDashed
+											className='cursor-pointer'
+											onClick={() => navigate('/status')}
+										/>
 										<BiCommentDetail />
 									</div>
 								</div>
