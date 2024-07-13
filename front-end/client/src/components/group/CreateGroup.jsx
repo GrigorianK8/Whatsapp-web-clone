@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { BsArrowLeft } from 'react-icons/bs'
+import { BsArrowLeft, BsArrowRight } from 'react-icons/bs'
+import ChatCard from '../chatCard/ChatCard'
+import NewGroup from './NewGroup'
 import SelectedMember from './SelectedMember'
 
 const CreateGroup = () => {
@@ -43,8 +45,35 @@ const CreateGroup = () => {
 							value={query}
 						/>
 					</div>
+					<div className='bg-white overflow-y-scroll h-[50.2vh]'>
+						{query &&
+							[1, 1, 1, 1, 1].map(item => (
+								<div
+									onClick={() => {
+										groupMember.add(item)
+										setGroupMember(groupMember)
+										setQuery('')
+									}}
+									key={item?.id}
+								>
+									<hr />
+									<ChatCard />
+								</div>
+							))}
+					</div>
+					<div className='flex bottom-10 py-10 bg-slate-200 items-center justify-center'>
+						<div
+							className='bg-green-600 rounded-full p-4 cursor-pointer'
+							onClick={() => {
+								setNewGroup(true)
+							}}
+						>
+							<BsArrowRight className='text-white pt-1 font-bold text-3xl' />
+						</div>
+					</div>
 				</div>
 			)}
+			{newGroup && <NewGroup />}
 		</div>
 	)
 }
