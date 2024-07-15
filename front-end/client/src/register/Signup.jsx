@@ -2,8 +2,10 @@ import { Button } from '@mui/material'
 import Alert from '@mui/material/Alert'
 import { green } from '@mui/material/colors'
 import Snackbar from '@mui/material/Snackbar'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { currentUser, register } from '../redux/auth/Action'
 
 const Signup = () => {
 	const [inputData, setInputData] = useState({
@@ -11,12 +13,17 @@ const Signup = () => {
 		email: '',
 		password: '',
 	})
+
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
 	const [openSnackbar, setOpenSnackbar] = useState(false)
+	const { auth } = useSelector(store => store)
+	const token = localStorage.getItem('token')
 
 	const handleSubmit = e => {
 		e.preventDefault()
-		console.log('handle submit')
+		console.log('handle submit', inputData)
+		dispatch(register(inputData))
 		setOpenSnackbar(true)
 	}
 
@@ -24,7 +31,20 @@ const Signup = () => {
 		setOpenSnackbar(false)
 	}
 
-	const handleChange = () => {}
+	const handleChange = e => {
+		const { name, value } = e.target
+		setInputData(values => ({ ...values, [name]: value }))
+	}
+
+	useEffect(() => {
+		if (token) dispatch(currentUser(token))
+	}, [token])
+
+	useEffect(() => {
+		if (auth.userReq?.fullName) {
+			navigate('/')
+		}
+	}, [auth.userReq])
 
 	return (
 		<div>
@@ -56,7 +76,7 @@ const Signup = () => {
 						<div>
 							<p className='mb-2'>Password</p>
 							<input
-								type='text'
+								type='password'
 								name='password'
 								className='py-2 outline outline-green-600 w-full rounded-md border'
 								placeholder='Enter your password'

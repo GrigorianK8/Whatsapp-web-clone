@@ -1,6 +1,7 @@
 import { BASE_URL } from '../../config/api'
 import {
 	LOGIN,
+	LOGOUT,
 	REGISTER,
 	SEARCH_USER,
 	UPDATE_USER,
@@ -17,6 +18,7 @@ export const register = data => async dispatch => {
 			body: JSON.stringify(data),
 		})
 		const resData = await res.json()
+		if (resData.jwt) localStorage.setItem('token', resData.jwt)
 		console.log('register ', resData)
 		dispatch({ type: REGISTER, payload: resData })
 	} catch (error) {}
@@ -32,7 +34,8 @@ export const login = data => async dispatch => {
 			body: JSON.stringify(data),
 		})
 		const resData = await res.json()
-		console.log('register ', resData)
+		if (resData.jwt) localStorage.setItem('token', resData.jwt)
+		console.log('login ', resData)
 		dispatch({ type: LOGIN, payload: resData })
 	} catch (error) {
 		console.log('catch error ', error)
@@ -41,7 +44,7 @@ export const login = data => async dispatch => {
 
 export const currentUser = token => async dispatch => {
 	try {
-		const res = await fetch(`${BASE_URL}/users/profile`, {
+		const res = await fetch(`${BASE_URL}/api/users/profile`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -49,7 +52,7 @@ export const currentUser = token => async dispatch => {
 			},
 		})
 		const resData = await res.json()
-		console.log('register ', resData)
+		console.log('current user ', resData)
 		dispatch({ type: USER_REQ, payload: resData })
 	} catch (error) {
 		console.log('catch error ', error)
@@ -58,13 +61,16 @@ export const currentUser = token => async dispatch => {
 
 export const searchUser = data => async dispatch => {
 	try {
-		const res = await fetch(`${BASE_URL}/users/search?name=${data.keyword}`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${data.token}`,
-			},
-		})
+		const res = await fetch(
+			`${BASE_URL}/api/users/search?name=${data.keyword}`,
+			{
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${data.token}`,
+				},
+			}
+		)
 		const resData = await res.json()
 		console.log('register ', resData)
 		dispatch({ type: SEARCH_USER, payload: resData })
@@ -75,7 +81,7 @@ export const searchUser = data => async dispatch => {
 
 export const updateUser = data => async dispatch => {
 	try {
-		const res = await fetch(`${BASE_URL}/users/update/${data.id}`, {
+		const res = await fetch(`${BASE_URL}/api/users/update/${data.id}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
@@ -88,4 +94,10 @@ export const updateUser = data => async dispatch => {
 	} catch (error) {
 		console.log('catch error ', error)
 	}
+}
+
+export const logout = () => async dispatch => {
+	localStorage.removeItem('token')
+	dispatch({ type: LOGOUT, payload: null })
+	dispatch({ type: USER_REQ, payload: null })
 }

@@ -1,6 +1,6 @@
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { BiCommentDetail } from 'react-icons/bi'
 import {
@@ -11,7 +11,9 @@ import {
 } from 'react-icons/bs'
 import { ImAttachment } from 'react-icons/im'
 import { TbCircleDashed } from 'react-icons/tb'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { currentUser, logout } from '../redux/auth/Action'
 import ChatCard from './chatCard/ChatCard'
 import CreateGroup from './group/CreateGroup'
 import './HomePage.css'
@@ -25,6 +27,9 @@ const HomePage = () => {
 	const [isProfile, setIsProfile] = useState(false)
 	const navigate = useNavigate()
 	const [isGroup, setIsGroup] = useState(false)
+	const dispatch = useDispatch()
+	const { auth } = useSelector(store => store)
+	const token = localStorage.getItem('token')
 
 	const handleSearch = () => {}
 	const handleClickOnChatCard = () => [setCurrentChat(true)]
@@ -50,6 +55,21 @@ const HomePage = () => {
 		setIsGroup(true)
 	}
 
+	const handleLogout = () => {
+		dispatch(logout())
+		navigate('/signup')
+	}
+
+	useEffect(() => {
+		if (!auth.userReq) {
+			navigate('/signup')
+		}
+	}, [auth.userReq])
+
+	useEffect(() => {
+		dispatch(currentUser('token'))
+	}, [token])
+
 	return (
 		<div className='relative'>
 			<div className='w-full py-14 bg-[#00a884]'></div>
@@ -74,7 +94,7 @@ const HomePage = () => {
 											src='https://cdn.pixabay.com/photo/2020/05/09/13/29/photographer-5149664_1280.jpg'
 											alt=''
 										/>
-										<p>username</p>
+										<p>{auth.userReq?.fullName}</p>
 									</div>
 									<div className='flex space-x-3 text-2xl'>
 										<TbCircleDashed
@@ -104,7 +124,7 @@ const HomePage = () => {
 												<MenuItem onClick={handleCreateGroup}>
 													Create group
 												</MenuItem>
-												<MenuItem onClick={handleClose}>Logout</MenuItem>
+												<MenuItem onClick={handleLogout}>Logout</MenuItem>
 											</Menu>
 										</div>
 									</div>

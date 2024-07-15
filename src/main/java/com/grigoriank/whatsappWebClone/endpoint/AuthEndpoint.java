@@ -59,6 +59,7 @@ public class AuthEndpoint {
         return new ResponseEntity<>(authDTO, HttpStatus.OK);
     }
 
+    @PostMapping("/sign-in")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO loginDTO) {
         String email = loginDTO.getEmail();
         String password = loginDTO.getPassword();
